@@ -34,6 +34,10 @@ const titles = {
 
 const routes = [
   {
+    path: "/",
+    redirect: "/files/",
+  },
+  {
     path: "/login",
     name: "Login",
     component: Login,

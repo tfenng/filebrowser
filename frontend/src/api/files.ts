@@ -55,6 +55,13 @@ export async function fetchAll(url: string): Promise<RecursiveEntry[]> {
   return (await res.json()) as RecursiveEntry[];
 }
 
+export async function metadata(url: string): Promise<FileMetadata> {
+  url = removePrefix(url);
+  return (
+    await fetchURL(`/api/metadata${url}`, {})
+  ).json() as Promise<FileMetadata>;
+}
+
 async function resourceAction(url: string, method: ApiMethod, content?: any) {
   url = removePrefix(url);
 

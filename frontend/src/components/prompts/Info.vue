@@ -27,6 +27,19 @@
         <strong>{{ $t("prompts.lastModified") }}:</strong> {{ humanTime }}
       </p>
 
+      <details v-if="showMetadataMismatch">
+        <summary>{{ $t("prompts.typeMismatch") }}</summary>
+        <p>
+          <strong>{{ $t("prompts.extensionType") }}:</strong>
+          {{ metadata.extensionType }}
+        </p>
+        <p>
+          <strong>{{ $t("prompts.detectedType") }}:</strong>
+          {{ metadata.detectedType }}
+        </p>
+        <p class="small">{{ $t("prompts.typeMismatchHelp") }}</p>
+      </details>
+
       <template v-if="dir && selected.length === 0">
         <p>
           <strong>{{ $t("prompts.numberFiles") }}:</strong> {{ req.numFiles }}
@@ -106,10 +119,16 @@ import { useLayoutStore } from "@/stores/layout";
 import { filesize } from "@/utils";
 import dayjs from "dayjs";
 import { files as api } from "@/api";
+import { shouldShowMetadataMismatch } from "@/utils/metadata";
 
 export default {
   name: "info",
   inject: ["$showError"],
+  data() {
+    return {
+      metadata: null,
+    };
+  },
   computed: {
     ...mapState(useFileStore, [
       "req",
@@ -170,6 +189,24 @@ export default {
       }
       return null;
     },
+    showMetadataMismatch: function () {
+      return shouldShowMetadataMismatch(this.metadata);
+    },
+  },
+  async mounted() {
+    if (this.dir || this.selected.length > 1) {
+      return;
+    }
+
+    const link = this.selectedCount
+      ? this.req.items[this.selected[0]].url
+      : this.$route.path;
+
+    try {
+      this.metadata = await api.metadata(link);
+    } catch (e) {
+      this.$showError(e);
+    }
   },
   methods: {
     ...mapActions(useLayoutStore, ["closeHovers"]),

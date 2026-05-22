@@ -87,3 +87,9 @@ interface RecursiveEntry {
   modified: string;
   isDir: boolean;
 }
+
+interface FileMetadata {
+  extensionType: string;
+  detectedType: string;
+  typeMismatch: boolean;
+}

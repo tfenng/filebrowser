@@ -57,6 +57,7 @@ import {
 import { inject, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
+import { normalizeLoginRedirect } from "@/utils/navigation";
 
 // Define refs
 const createMode = ref<boolean>(false);
@@ -79,7 +80,7 @@ const submit = async (event: Event) => {
   event.preventDefault();
   event.stopPropagation();
 
-  const redirect = (route.query.redirect || "/files/") as string;
+  const redirect = normalizeLoginRedirect(route.query.redirect);
 
   let captcha = "";
   if (recaptcha) {

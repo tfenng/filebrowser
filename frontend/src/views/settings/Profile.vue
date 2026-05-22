@@ -110,6 +110,7 @@ import Languages from "@/components/settings/Languages.vue";
 import { computed, inject, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { authMethod, noAuth } from "@/utils/constants";
+import { getPasswordUpdateError } from "@/utils/password";
 
 const layoutStore = useLayoutStore();
 const authStore = useAuthStore();
@@ -161,16 +162,28 @@ onMounted(async () => {
 const updatePassword = async (event: Event) => {
   event.preventDefault();
 
-  if (
-    password.value !== passwordConf.value ||
-    password.value === "" ||
-    currentPassword.value === "" ||
-    authStore.user === null
-  ) {
+  const passwordError = getPasswordUpdateError({
+    password: password.value,
+    passwordConf: passwordConf.value,
+    currentPassword: currentPassword.value,
+    requiresCurrentPassword: isCurrentPasswordRequired.value,
+    hasUser: authStore.user !== null,
+  });
+
+  if (passwordError !== null) {
+    const messages = {
+      missingPassword: t("settings.passwordRequired"),
+      passwordMismatch: t("login.passwordsDontMatch"),
+      missingCurrentPassword: t("settings.currentPasswordMessage"),
+      missingUser: "User is not set!",
+    };
+    $showError(messages[passwordError]);
     return;
   }
 
   try {
+    if (authStore.user === null) throw new Error("User is not set!");
+
     const data = {
       ...authStore.user,
       id: authStore.user.id,

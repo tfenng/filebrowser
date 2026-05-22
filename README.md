@@ -12,6 +12,15 @@ File Browser provides a file managing interface within a specified directory and
 
 Documentation on how to install, configure, and contribute to this project is hosted at [filebrowser.org](https://filebrowser.org).
 
+## Local Development
+
+For the local development database in this checkout, use:
+
+```text
+Username: admin
+Password: adminuser987^
+```
+
 ## Project Status
 
 This project is a finished product which fulfills its goal: be a single binary web File Browser which can be run by anyone anywhere. That means that File Browser is currently on **maintenance-only** mode. Therefore, please note the following:

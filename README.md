@@ -2,6 +2,10 @@
   <img src="https://raw.githubusercontent.com/filebrowser/filebrowser/master/branding/banner.png" width="550"/>
 </p>
 
+<p align="center">
+  English · <a href="README-cn.md">简体中文</a>
+</p>
+
 [![Build](https://github.com/filebrowser/filebrowser/actions/workflows/ci.yaml/badge.svg)](https://github.com/filebrowser/filebrowser/actions/workflows/ci.yaml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/filebrowser/filebrowser/v2)](https://goreportcard.com/report/github.com/filebrowser/filebrowser/v2)
 [![Version](https://img.shields.io/github/release/filebrowser/filebrowser.svg)](https://github.com/filebrowser/filebrowser/releases/latest)
@@ -14,12 +18,18 @@ Documentation on how to install, configure, and contribute to this project is ho
 
 ## Local Development
 
-For the local development database in this checkout, use:
+On first launch with a new `filebrowser.db`, File Browser creates the `admin`
+user and prints a randomly generated password to the terminal. Save it and
+change it after signing in. If that output is lost, stop the running server,
+reset the password, and restart:
 
-```text
-Username: admin
-Password: adminuser987^
+```bash
+./filebrowser users update admin --password 'your-new-strong-password'
+./filebrowser --root /path/to/files
 ```
+
+The management command cannot update the BoltDB database while the server is
+using it; otherwise, it may report a `timeout`.
 
 ## Project Status
 
